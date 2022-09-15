@@ -40,12 +40,6 @@ player_dimensions = {
     'width': 200,
     'height': 150
 }
-# dimensions = {
-#     'left': 880,
-#     'top': 560,
-#     'width': 160,
-#     'height': 20
-# }
 dimensions_left = {
     'left': 882,
     'top': 565,
@@ -163,13 +157,6 @@ def apply_hsv_filter(sct, hsv_filter, Type):
     mask = cv2.inRange(hsv, lower, upper)
     result = cv2.bitwise_and(hsv, hsv, mask=mask)
     img = cv2.cvtColor(result, cv2.COLOR_HSV2BGR)
-    # scale_percent = 500  # percent of original size
-    # width = int(img.shape[1] * scale_percent / 100)
-    # height = int(img.shape[0] * scale_percent / 100)
-    # dim = (width, height)
-    # img_resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
-    # cv2.imshow(name, img_resized)
-    # cv2.waitKey(1)
     return img
 
 
