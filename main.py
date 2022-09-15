@@ -5,8 +5,6 @@ import keyboard
 from functions import *
 from datetime import datetime
 from threading import Thread
-import os
-def clear(): return os.system('cls')
 
 
 def main():
