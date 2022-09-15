@@ -1,7 +1,6 @@
 import mss
 from time import time, sleep
 import pyautogui
-import keyboard
 from functions import *
 from datetime import datetime
 from threading import Thread
