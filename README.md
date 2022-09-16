@@ -8,25 +8,27 @@ I have created this project for the simple fact of wanting to automate something
 
 I have chosen the game "Core Keeper" because it is a fun, entertaining game, and above all a game oriented to the "single-player" where an abuse of the use of bots does not affect the progress of the other players.
 
+
+
 I want to make the latter clear. I don't want to be called a "boter" or "cheater" for creating a program to automate a process, with this project I'm not looking to promote these practices, it's just a personal project that I've made public so that it doesn't get forgotten in the background from my hard drive.
 
 
 
-#Instructions:
+# Instructions:
 
-1- Open the game and place you character near a water block 
+-1- Open the game and place you character near a water block 
       It doesn't matter if the water block is to the right 
       or left of the character, but never above or below.
       Remember that it only works with 1920x1080 resolution,
       it does not scale automatically.
       
-2- Place your fishing rod in the button 5 of your action bar
+-2- Place your fishing rod in the button 5 of your action bar
       I have chosen button 5 because... why not?
       The bot presses the 5 button from time to time
       to make sure that it has the fishing rod in its hands,
       in case there is any accidental click or scroll during the process.
 
-3- Tipe    pip install -r requirements.txt     in your command line and run main.py
+-3- Tipe    pip install -r requirements.txt     in your command line and run main.py
       You will see that some options appear to select:
         The first one will make you choose between "y" or "n" (yes, no or leave blank) to activate or not the "debug" mode (disabled by default)
              With debug mode enabled, a box will be displayed above the game (always on top) showing what the script "sees".
@@ -38,12 +40,12 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
             and start fishing. When the assigned session minutes are completed, the bot will stop and display the details of the session,
             such as: trys, objects caught, fish caught, fails and a rate of catches/minute.
 
-4- If you want to interrupt the script, you just have to press the "q" key,
+-4- If you want to interrupt the script, you just have to press the "q" key,
       I recommend pressing it several times in case the script is in one of the sleep().
       
       
 
-Known issues:
+# Known issues:
       It may be that the bobber detection is too sensitive or insensitive, you can adjust the values for "threshold" inside the code in the main.py file.
       
       
