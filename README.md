@@ -28,7 +28,7 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
       to make sure that it has the fishing rod in its hands,
       in case there is any accidental click or scroll during the process.
 
-- 3- Tipe    pip install -r requirements.txt     in your command line and run main.py.
+- 3- Tipe    pip install -r requirements.txt     in your command line in the same folder as the script and run main.py.
      * You will see that some options appear to select:
         - The first one will make you choose between "y" or "n" (yes, no or leave blank) to activate or not the "debug" mode (disabled by default)
              With debug mode enabled, a box will be displayed above the game (always on top) showing what the script "sees".   
@@ -43,7 +43,6 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
 - 4- If you want to interrupt the script, you just have to press the "q" key,
       I recommend pressing it several times in case the script is in one of the sleep().
       
-      
 
 # Known issues:
       It may be that the bobber detection is too sensitive or insensitive, you can adjust the values for "threshold" inside the code in the main.py file.
@@ -51,8 +50,8 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
       
       
       
-      
-Thanks to Ben Johnson for the excellent tutorial he made with a series of videos on youtube about openCV.
+# Thanks      
+Thanks to Ben Johnson for the excellent tutorial he made with a series of videos on youtube about openCV and other cool stuff.
 Without them, I would not have been able to carry out this project, nor would I have learned so much.
 https://www.youtube.com/c/LearnCodeByGaming/featured
 https://github.com/learncodebygaming
