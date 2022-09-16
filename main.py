@@ -11,7 +11,7 @@ def main():
     Type = 1
     cork = processed_cork
     filter = filter1
-    cork_th = 0.60
+    thershold = 0.60
 
     duration = 60
     debug = False
@@ -60,7 +60,7 @@ mode 2:
                 Type = 2
                 cork = processed_cork2
                 filter = filter2
-                cork_th = 0.58
+                threshold = 0.58
                 print(f'\nSelected filter type: {Type}')
                 break
             else:
@@ -115,7 +115,7 @@ mode 2:
                     trys += 1
                     Time = time()
                 Time = time()
-            if checkCork(sct, cork, filter, Type)[0] >= cork_th:
+            if checkCork(sct, cork, filter, Type)[0] >= thershold:
                 tiks += 1
             if tiks >= 3:
                 throwRod()
