@@ -30,11 +30,9 @@ sct = mss.mss()
 cork = cv2.imread('img/cork.jpg', cv2.IMREAD_UNCHANGED)
 processed_cork = cv2.imread('img/processedCork.jpg', cv2.IMREAD_UNCHANGED)
 filter1 = HsvFilter(111, 0, 59, 179, 254, 255, 103, 0, 255, 54)
-processed_cork2 = cv2.imread(
-    'img/processedCork.jpg', cv2.IMREAD_UNCHANGED)  # cv2.IMREAD_UNCHANGED
+processed_cork2 = cv2.imread('img/processedCork.jpg', cv2.IMREAD_UNCHANGED)
 filter2 = HsvFilter(115, 0, 0, 179, 255, 203, 226, 0, 115, 36)
 rod = cv2.imread('img/rod.jpg', cv2.IMREAD_GRAYSCALE)
-# cv2.COLOR_BGR2GRAY
 rodLeft = cv2.imread('img/rodLeft.jpg', cv2.IMREAD_GRAYSCALE)
 fishing = cv2.imread('img/fishing.jpg', cv2.IMREAD_GRAYSCALE)
 pull = cv2.imread('img/pullFish.jpg', cv2.IMREAD_UNCHANGED)
@@ -81,16 +79,16 @@ def checkCork(sct, img=processed_cork, filter=filter1, Type=1, dimensions_right=
     scr = numpy.array(sct.grab(dimensions))
     scr = apply_hsv_filter(scr, filter, Type)
     result = cv2.matchTemplate(
-        scr, img, cv2.TM_CCOEFF_NORMED)  # cv2.TM_CCOEFF_NORMED
+        scr, img, cv2.TM_CCOEFF_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
     return max_val, result
 
 
 def checkRod(sct, img=rod, imgl=rodLeft, dimensions=player_dimensions):
     scr = numpy.array(sct.grab(dimensions))
-    scr_remove = cv2.cvtColor(scr, cv2.COLOR_BGR2GRAY)  # scr[:, :, :3]
+    scr_remove = cv2.cvtColor(scr, cv2.COLOR_BGR2GRAY)
     result = cv2.matchTemplate(
-        scr_remove, img, cv2.TM_CCOEFF_NORMED)  # cv2.TM_CCOEFF_NORMED
+        scr_remove, img, cv2.TM_CCOEFF_NORMED)
     resultL = cv2.matchTemplate(
         scr_remove, imgl, cv2.TM_CCOEFF_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
@@ -112,9 +110,8 @@ def throwRod():
 
 def Fishing(sct, img=fishing, dimensions=fishing_dimensions):
     scr = numpy.array(sct.grab(dimensions))
-    scr_remove = cv2.cvtColor(scr, cv2.COLOR_BGR2GRAY)  # scr[:, :, :3]
-    result = cv2.matchTemplate(
-        scr_remove, img, cv2.TM_CCOEFF_NORMED)  # cv2.TM_CCOEFF_NORMED
+    scr_remove = cv2.cvtColor(scr, cv2.COLOR_BGR2GRAY)
+    result = cv2.matchTemplate(scr_remove, img, cv2.TM_CCOEFF_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
     return max_val
 
@@ -122,8 +119,7 @@ def Fishing(sct, img=fishing, dimensions=fishing_dimensions):
 def pullCheck(sct, img=pull, dimensions=fishing_dimensions):
     scr = numpy.array(sct.grab(dimensions))
     scr_remove = scr[:, :, :3]
-    result = cv2.matchTemplate(
-        scr_remove, img, cv2.TM_CCOEFF_NORMED)  # cv2.TM_CCOEFF_NORMED
+    result = cv2.matchTemplate(scr_remove, img, cv2.TM_CCOEFF_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
     return max_val, result
 
@@ -141,8 +137,7 @@ def releaseRod():
 def caughtCheck(fishes, caught, sct, img=fishCaught, dimensions=fishing_dimensions):
     scr = numpy.array(sct.grab(dimensions))
     scr_remove = scr[:, :, :3]
-    result = cv2.matchTemplate(
-        scr_remove, img, cv2.TM_CCOEFF_NORMED)  # cv2.TM_CCOEFF_NORMED
+    result = cv2.matchTemplate(scr_remove, img, cv2.TM_CCOEFF_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
     if max_val >= .82:
         fishes += 1
@@ -199,10 +194,8 @@ def showRectangles(sct, result, threshold, target, dimensions, text, fullScreen=
     except:
         yloc, xloc = numpy.where(result[2] >= threshold)
     for (x, y) in zip(xloc, yloc):
-        rectangles.append([int(x + dimensions['left']),
-                          int(y + dimensions['top']), int(w), int(h)])
-        rectangles.append([int(x + dimensions['left']),
-                           int(y + dimensions['top']), int(w), int(h)])
+        rectangles.append([int(x + dimensions['left']), int(y + dimensions['top']), int(w), int(h)])
+        rectangles.append([int(x + dimensions['left']), int(y + dimensions['top']), int(w), int(h)])
     rectangles, weights = cv2.groupRectangles(rectangles, 1, 0.3)
     for (x, y, w, h) in rectangles:
         cv2.rectangle(scr, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -219,8 +212,7 @@ def showDetectionArea(sct, dimensions, text, fullScreen=full_dimensions):
         scr = numpy.array(sct.grab(fullScreen))
     except:
         scr = sct
-    cv2.rectangle(scr, (dimensions['left'], dimensions['top']), (
-        dimensions['left'] + dimensions['width'], dimensions['top'] + dimensions['height']), (0, 0, 255), 2)
+    cv2.rectangle(scr, (dimensions['left'], dimensions['top']), (dimensions['left'] + dimensions['width'], dimensions['top'] + dimensions['height']), (0, 0, 255), 2)
     org = (dimensions['left'], dimensions['top'] - 10)
     fontFace = cv2.FONT_HERSHEY_DUPLEX
     fontScale = 0.5
@@ -237,26 +229,19 @@ def showFrames(sct, start, duration, Type, dimensions_right=dimensions, dimensio
         else:
             dimensions = dimensions_left
         if Type == 1:
-            img = showRectangles(sct, checkCork(
-                sct), 0.55, processed_cork, dimensions, 'cork  **1**')
+            img = showRectangles(sct, checkCork(sct), 0.55, processed_cork, dimensions, 'cork  **1**')
             name = 'fishing with filter1'
         else:
-            img = showRectangles(sct, checkCork(
-                sct, processed_cork2, filter2, 2), 0.55, processed_cork2, dimensions, 'cork  **2**')
+            img = showRectangles(sct, checkCork(sct, processed_cork2, filter2, 2), 0.55, processed_cork2, dimensions, 'cork  **2**')
             name = 'fishing with filter2'
-        img = showRectangles(img, checkRod(sct), 0.70,
-                             rod, player_dimensions, 'Rod')
-        img = showRectangles(img, pullCheck(sct), 0.80, pull,
-                             fishing_dimensions, 'Fishing')
-        img = showRectangles(img, caughtCheck(0, None, sct),
-                             0.82, fishCaught, fishing_dimensions, 'Caught!')
-        img = showDetectionArea(showDetectionArea(showDetectionArea(
-            img, fishing_dimensions, 'Fishing area'), player_dimensions, 'Player area'), dimensions, 'Cork area')
+        img = showRectangles(img, checkRod(sct), 0.70, rod, player_dimensions, 'Rod')
+        img = showRectangles(img, pullCheck(sct), 0.80, pull, fishing_dimensions, 'Fishing')
+        img = showRectangles(img, caughtCheck(0, None, sct),  0.82, fishCaught, fishing_dimensions, 'Caught!')
+        img = showDetectionArea(showDetectionArea(showDetectionArea(img, fishing_dimensions, 'Fishing area'), player_dimensions, 'Player area'), dimensions, 'Cork area')
         cv2.namedWindow(name, cv2.WINDOW_NORMAL)
         cv2.resizeWindow(name, 440, 500)
         hWnd = win32gui.FindWindow(None, name)
-        win32gui.SetWindowPos(hWnd, win32con.HWND_TOPMOST, 0, 0, 0, 0,
-                              win32con.SWP_SHOWWINDOW | win32con.SWP_NOSIZE | win32con.SWP_NOMOVE)
+        win32gui.SetWindowPos(hWnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_SHOWWINDOW | win32con.SWP_NOSIZE | win32con.SWP_NOMOVE)
         cv2.imshow(name, img[400:900, 740:1180])
         cv2.waitKey(1)
         if keyboard.is_pressed('q') or divmod((datetime.now() - start).total_seconds(), 60)[0] >= duration:
@@ -271,19 +256,14 @@ def quit(sct, start, duration, trys, items, fishes, fails, minute, Type):
             throwRod()
         total_duration = int(divmod((end - start).total_seconds(), 60)[0])
         clear()
-        print(
-            f'\nSession started at: {start.strftime("%H:%M:%S")}')
-        print(
-            f'Trys: {trys}\nItems: {items}\nFishes: {fishes}\nFails: {fails}')
-        print(
-            f'Session ended at: {end.strftime("%H:%M:%S")}')
-        print(
-            f'Session duration: {total_duration} {minute}')
+        print(f'\nSession started at: {start.strftime("%H:%M:%S")}')
+        print(f'Trys: {trys}\nItems: {items}\nFishes: {fishes}\nFails: {fails}')
+        print(f'Session ended at: {end.strftime("%H:%M:%S")}')
+        print(f'Session duration: {total_duration} {minute}')
         try:
             print(
                 f'Catches per minute ratio: {(items + fishes) / total_duration}')
         except:
-            print(
-                'Too little time to be able to calculate the catches/minute ratio')
+            print('Too little time to be able to calculate the catches/minute ratio')
         print(f'Filter type: {Type}')
         return True
