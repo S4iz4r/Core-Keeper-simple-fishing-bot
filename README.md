@@ -56,5 +56,6 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
 # Thanks      
 Thanks to Ben Johnson for the excellent tutorial he made with a series of videos on youtube about openCV and other cool stuff.
 Without them, I would not have been able to carry out this project, nor would I have learned so much.
-https://www.youtube.com/c/LearnCodeByGaming/featured
-https://github.com/learncodebygaming
+- https://www.youtube.com/c/LearnCodeByGaming/featured
+
+- https://github.com/learncodebygaming
