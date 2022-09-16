@@ -32,7 +32,7 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
 
 - 4- Run main.py.
      * You will see that some options appear to select:
-        - The first one will make you choose between "y" or "n" (yes, no or leave blank) to activate or not the "debug" mode (disabled by default)
+        - The first one will make you choose between "y" or "n" (Yes, No or leave blank) to activate or not the "debug" mode (disabled by default)
              With debug mode enabled, a box will be displayed above the game (always on top) showing what the script "sees".   
         - The second option shows the default duration of the fishing session and asks if you want to change it,
             press enter if you want to leave it as is or enter an integer for the duration you want (60 minutes by default).    
