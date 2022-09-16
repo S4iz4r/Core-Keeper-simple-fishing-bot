@@ -266,4 +266,6 @@ def quit(sct, start, duration, trys, items, fishes, fails, minute, Type):
         except:
             print('Too little time to be able to calculate the catches/minute ratio')
         print(f'Filter type: {Type}')
+        print('\nPress "q" to quit')
+        keyboart.wait('q')
         return True
