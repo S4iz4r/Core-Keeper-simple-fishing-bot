@@ -38,7 +38,7 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
             press enter if you want to leave it as is or enter an integer for the duration you want (60 minutes by default).    
         - The third and last option gives you a choice of 2 types of detection mode (HSV based), both of which give similar results (mode 1 by default).
             Enter the number "2" or leave it blank and press enter.
-        - you can skip these options by pressing "intro" 3 times. 
+        - You can skip these options by pressing "intro" 3 times. 
         - After a couple of seconds, the bot will take control of the mouse, click on a point in the game to bring it into focus, 
             and start fishing. When the assigned session minutes are completed, the bot will stop and display the details of the session,
             such as: trys, objects caught, fish caught, fails and a rate of catches/minute.
