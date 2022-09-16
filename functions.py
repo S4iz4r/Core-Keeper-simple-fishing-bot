@@ -256,16 +256,16 @@ def quit(sct, start, duration, trys, items, fishes, fails, minute, Type):
             throwRod()
         total_duration = int(divmod((end - start).total_seconds(), 60)[0])
         clear()
-        print(f'\nSession started at: {start.strftime("%H:%M:%S")}')
-        print(f'Trys: {trys}\nItems: {items}\nFishes: {fishes}\nFails: {fails}')
-        print(f'Session ended at: {end.strftime("%H:%M:%S")}')
-        print(f'Session duration: {total_duration} {minute}')
+        text = f'\nSession started at: {start.strftime("%H:%M:%S")}\nTrys: {trys}\nItems: {items}\nFishes: {fishes}\nFails: {fails}\nSession ended at: {end.strftime("%H:%M:%S")}\nSession duration: {total_duration} {minute}'
         try:
-            print(
-                f'Catches per minute ratio: {(items + fishes) / total_duration}')
+            text += f'\nCatches per minute ratio: {(items + fishes) / total_duration}'
         except:
-            print('Too little time to be able to calculate the catches/minute ratio')
-        print(f'Filter type: {Type}')
-        print('\nPress "q" to quit')
-        keyboart.wait('q')
+            text += '\nToo little time to be able to calculate the catches/minute ratio'
+        text += f'\nFilter type: {Type}'
+        with open('results.txt', 'w', encoding='utf-8') as f:
+            f.write(text)
+        f.close()
+        print('Press "q" to quit')
+        keyboard.wait('q')
+        print('Results saved in the file "results.txt"')
         return True
