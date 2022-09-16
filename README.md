@@ -40,7 +40,7 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
             and start fishing. When the assigned session minutes are completed, the bot will stop and display the details of the session,
             such as: trys, objects caught, fish caught, fails and a rate of catches/minute.
 
--4- If you want to interrupt the script, you just have to press the "q" key,
+- 4- If you want to interrupt the script, you just have to press the "q" key,
       I recommend pressing it several times in case the script is in one of the sleep().
       
       
