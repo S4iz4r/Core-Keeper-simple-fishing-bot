@@ -256,7 +256,7 @@ def quit(sct, start, duration, trys, items, fishes, fails, minute, Type):
             throwRod()
         total_duration = int(divmod((end - start).total_seconds(), 60)[0])
         clear()
-        text = f'\nSession started at: {start.strftime("%H:%M:%S")}\nTrys: {trys}\nItems: {items}\nFishes: {fishes}\nFails: {fails}\nSession ended at: {end.strftime("%H:%M:%S")}\nSession duration: {total_duration} {minute}'
+        text = f'Session started at: {start.strftime("%H:%M:%S")}\nTrys: {trys}\nItems: {items}\nFishes: {fishes}\nFails: {fails}\nSession ended at: {end.strftime("%H:%M:%S")}\nSession duration: {total_duration} {minute}'
         try:
             text += f'\nCatches per minute ratio: {(items + fishes) / total_duration}'
         except:
