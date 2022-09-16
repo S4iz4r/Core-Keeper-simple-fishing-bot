@@ -26,7 +26,7 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
       to make sure that it has the fishing rod in its hands,
       in case there is any accidental click or scroll during the process.
 
-3- Run main.py.
+3- Tipe    pip install -r requirements.txt     in your command line and run main.py
       You will see that some options appear to select:
         The first one will make you choose between "y" or "n" (yes, no or leave blank) to activate or not the "debug" mode (disabled by default)
              With debug mode enabled, a box will be displayed above the game (always on top) showing what the script "sees".
