@@ -16,7 +16,7 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
 
 # Instructions:
 
-- 1- Tipe    pip install -r requirements.txt     in your command line in the same folder as the script and run main.py.
+- 1- Type    pip install -r requirements.txt     in your command line in the same folder as the script and run main.py.
 
 - 2- Open the game and place you character near a water block 
       It doesn't matter if the water block is to the right 
@@ -41,7 +41,7 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
         - You can skip these options by pressing "enter" 3 times. 
         - After a couple of seconds, the bot will take control of the mouse, click on a point in the game to bring it into focus, 
             and start fishing. When the assigned session minutes are completed, the bot will stop and display the details of the session,
-            such as: trys, objects caught, fish caught, fails and a rate of catches/minute.
+            such as: trys, object caught, fish caught, fails and a rate of catches/minute.
 
 - 5- If you want to interrupt the script, you just have to press the "q" key,
       I recommend pressing it several times in case the script is in one of the sleep().
