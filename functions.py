@@ -10,6 +10,7 @@ import win32con
 import os
 def clear(): return os.system('cls')
 
+
 class HsvFilter:
 
     def __init__(self, hMin=None, sMin=None, vMin=None, hMax=None, sMax=None, vMax=None,
@@ -24,6 +25,7 @@ class HsvFilter:
         self.sSub = sSub
         self.vAdd = vAdd
         self.vSub = vSub
+
 
 sct = mss.mss()
 
@@ -194,8 +196,10 @@ def showRectangles(sct, result, threshold, target, dimensions, text, fullScreen=
     except:
         yloc, xloc = numpy.where(result[2] >= threshold)
     for (x, y) in zip(xloc, yloc):
-        rectangles.append([int(x + dimensions['left']), int(y + dimensions['top']), int(w), int(h)])
-        rectangles.append([int(x + dimensions['left']), int(y + dimensions['top']), int(w), int(h)])
+        rectangles.append([int(x + dimensions['left']),
+                          int(y + dimensions['top']), int(w), int(h)])
+        rectangles.append([int(x + dimensions['left']),
+                          int(y + dimensions['top']), int(w), int(h)])
     rectangles, weights = cv2.groupRectangles(rectangles, 1, 0.3)
     for (x, y, w, h) in rectangles:
         cv2.rectangle(scr, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -212,7 +216,8 @@ def showDetectionArea(sct, dimensions, text, fullScreen=full_dimensions):
         scr = numpy.array(sct.grab(fullScreen))
     except:
         scr = sct
-    cv2.rectangle(scr, (dimensions['left'], dimensions['top']), (dimensions['left'] + dimensions['width'], dimensions['top'] + dimensions['height']), (0, 0, 255), 2)
+    cv2.rectangle(scr, (dimensions['left'], dimensions['top']), (dimensions['left'] +
+                  dimensions['width'], dimensions['top'] + dimensions['height']), (0, 0, 255), 2)
     org = (dimensions['left'], dimensions['top'] - 10)
     fontFace = cv2.FONT_HERSHEY_DUPLEX
     fontScale = 0.5
@@ -229,19 +234,26 @@ def showFrames(sct, start, duration, Type, dimensions_right=dimensions, dimensio
         else:
             dimensions = dimensions_left
         if Type == 1:
-            img = showRectangles(sct, checkCork(sct), 0.55, processed_cork, dimensions, 'cork  **1**')
+            img = showRectangles(sct, checkCork(sct), 0.55,
+                                 processed_cork, dimensions, 'cork  **1**')
             name = 'fishing with filter1'
         else:
-            img = showRectangles(sct, checkCork(sct, processed_cork2, filter2, 2), 0.55, processed_cork2, dimensions, 'cork  **2**')
+            img = showRectangles(sct, checkCork(
+                sct, processed_cork2, filter2, 2), 0.55, processed_cork2, dimensions, 'cork  **2**')
             name = 'fishing with filter2'
-        img = showRectangles(img, checkRod(sct), 0.70, rod, player_dimensions, 'Rod')
-        img = showRectangles(img, pullCheck(sct), 0.80, pull, fishing_dimensions, 'Fishing')
-        img = showRectangles(img, caughtCheck(0, None, sct),  0.82, fishCaught, fishing_dimensions, 'Caught!')
-        img = showDetectionArea(showDetectionArea(showDetectionArea(img, fishing_dimensions, 'Fishing area'), player_dimensions, 'Player area'), dimensions, 'Cork area')
+        img = showRectangles(img, checkRod(sct), 0.70,
+                             rod, player_dimensions, 'Rod')
+        img = showRectangles(img, pullCheck(sct), 0.80,
+                             pull, fishing_dimensions, 'Fishing')
+        img = showRectangles(img, caughtCheck(0, None, sct),
+                             0.82, fishCaught, fishing_dimensions, 'Caught!')
+        img = showDetectionArea(showDetectionArea(showDetectionArea(
+            img, fishing_dimensions, 'Fishing area'), player_dimensions, 'Player area'), dimensions, 'Cork area')
         cv2.namedWindow(name, cv2.WINDOW_NORMAL)
         cv2.resizeWindow(name, 440, 500)
         hWnd = win32gui.FindWindow(None, name)
-        win32gui.SetWindowPos(hWnd, win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_SHOWWINDOW | win32con.SWP_NOSIZE | win32con.SWP_NOMOVE)
+        win32gui.SetWindowPos(hWnd, win32con.HWND_TOPMOST, 0, 0, 0, 0,
+                              win32con.SWP_SHOWWINDOW | win32con.SWP_NOSIZE | win32con.SWP_NOMOVE)
         cv2.imshow(name, img[400:900, 740:1180])
         cv2.waitKey(1)
         if keyboard.is_pressed('q') or divmod((datetime.now() - start).total_seconds(), 60)[0] >= duration:
@@ -256,14 +268,15 @@ def quit(sct, start, duration, trys, items, fishes, fails, minute, Type):
             throwRod()
         total_duration = int(divmod((end - start).total_seconds(), 60)[0])
         clear()
-        print(f'\nSession started at: {start.strftime("%H:%M:%S")}')
-        print(f'Trys: {trys}\nItems: {items}\nFishes: {fishes}\nFails: {fails}')
-        print(f'Session ended at: {end.strftime("%H:%M:%S")}')
-        print(f'Session duration: {total_duration} {minute}')
+        text = f'Session started at: {start.strftime("%H:%M:%S")}\nTrys: {trys}\nItems: {items}\nFishes: {fishes}\nFails: {fails}\nSession ended at: {end.strftime("%H:%M:%S")}\nSession duration: {total_duration} {minute}\nFilter type: {Type}'
         try:
-            print(
-                f'Catches per minute ratio: {(items + fishes) / total_duration}')
+            text += f'\nCatches per minute ratio: {(items + fishes) / total_duration}'
         except:
-            print('Too little time to be able to calculate the catches/minute ratio')
-        print(f'Filter type: {Type}')
+            text += '\nToo little time to be able to calculate the catches/minute ratio'
+        with open('results.txt', 'w', encoding='utf-8') as f:
+            f.write(text)
+        f.close()
+        print('Press "q" to quit')
+        keyboard.wait('q')
+        print('Results saved in the file "results.txt"')
         return True
