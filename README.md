@@ -1,7 +1,7 @@
 # Core-Keeper-simple-fishing-bot
 
 This is a simple fishing bot created with Python and openCV for the game "Core Keeper".
-OpenCV coordinates are only adjusted for 1920x1080 screen resolution.
+OpenCV coordinates adjusted for 3440x1440 screen resolution.
 
 
 I have created this project for the simple fact of wanting to automate something (simple) as part of my learning path in programming.
@@ -21,7 +21,7 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
 - 2- Open the game and place you character near a water block 
       It doesn't matter if the water block is to the right 
       or left of the character, but never above or below.
-      Remember that it only works with 1920x1080 resolution,
+      Remember that it only works with 3440x1440 resolution,
       it does not scale automatically (WIP)
       
 - 3- Place your fishing rod in the button 5 of your action bar.
@@ -29,6 +29,7 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
       The bot presses the 5 button from time to time
       to make sure that it has the fishing rod in its hands,
       in case there is any accidental click or scroll during the process.
+      Also remember to set "Alt + 1" to do the same as mouse right button (this is to prevent accidental clicking).
 
 - 4- Run main.py.
      * You will see that some options appear to select:
@@ -44,11 +45,9 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
             such as: trys, object caught, fish caught, fails and a rate of catches/minute.
 
 - 5- If you want to interrupt the script, you just have to press the "q" key,
-      I recommend pressing it several times in case the script is in one of the sleep().
+     Pressing it several times in case the script is in one of the sleep().
       
 
-# Known issues:
-      It may be that the fishing cork detection is too sensitive or insensitive, you can adjust the values for "threshold" inside the code in the main.py file.
       
       
       

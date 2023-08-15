@@ -28,56 +28,56 @@ class HsvFilter:
 
 
 sct = mss.mss()
+cv2.namedWindow("dst", cv2.WND_PROP_FULLSCREEN)
+cv2.setWindowProperty("dst", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+_, _, screenWidth, screenHeight = cv2.getWindowImageRect('dst')
+cv2.destroyAllWindows()
+print(f'Meassured screen size: {screenWidth}x{screenHeight}')
 
-cork = cv2.imread('img/cork.jpg', cv2.IMREAD_UNCHANGED)
-processed_cork = cv2.imread('img/processedCork.jpg', cv2.IMREAD_UNCHANGED)
+exclamation = cv2.imread('img/exclamation.jpg', cv2.IMREAD_UNCHANGED)
 filter1 = HsvFilter(111, 0, 59, 179, 254, 255, 103, 0, 255, 54)
-processed_cork2 = cv2.imread('img/processedCork.jpg', cv2.IMREAD_UNCHANGED)
 filter2 = HsvFilter(115, 0, 0, 179, 255, 203, 226, 0, 115, 36)
 rod = cv2.imread('img/rod.jpg', cv2.IMREAD_GRAYSCALE)
 rodLeft = cv2.imread('img/rodLeft.jpg', cv2.IMREAD_GRAYSCALE)
 fishing = cv2.imread('img/fishing.jpg', cv2.IMREAD_GRAYSCALE)
-pull = cv2.imread('img/pullFish.jpg', cv2.IMREAD_UNCHANGED)
+# pull = cv2.imread('img/pullFish.jpg', cv2.IMREAD_UNCHANGED)
+pull = cv2.imread('img/pullFish.jpg', cv2.IMREAD_GRAYSCALE)
 fishCaught = cv2.imread('img/fishCaught.jpg', cv2.IMREAD_UNCHANGED)
 
 fishing_dimensions = {
-    'left': 750,
-    'top': 820,
-    'width': 420,
-    'height': 145
+    'left': int(screenWidth / 2 - 275),
+    'top': int(screenHeight / 2 + 383),
+    'width': 552,
+    'height': 105
 }
 
 player_dimensions = {
-    'left': 860,
-    'top': 450,
-    'width': 200,
-    'height': 150
+    'left': int(screenWidth / 2 - 120),  # 860
+    'top': int(screenHeight / 2 - 140),  # 450
+    'width': 225,
+    'height': 180
 }
 dimensions_left = {
-    'left': 882,
-    'top': 565,
-    'width': 40,
-    'height': 20
+    'left': int(screenWidth / 2 - 55),  # 882
+    'top': int(screenHeight / 2 - 230),  # 565
+    'width': 100,
+    'height': 100
 }
 dimensions = {
-    'left': 1005,
-    'top': 565,
-    'width': 40,
-    'height': 20
+    'left': int(screenWidth / 2 - 55),  # 1005
+    'top': int(screenHeight / 2 - 230),  # 565,
+    'width': 100,
+    'height': 100
 }
 full_dimensions = {
     'left': 0,
     'top': 0,
-    'width': 1920,
-    'height': 1080
+    'width': screenWidth,
+    'height': screenHeight
 }
 
 
-def checkCork(sct, img=processed_cork, filter=filter1, Type=1, dimensions_right=dimensions, dimensions_left=dimensions_left):
-    if checkRod(sct)[2]:
-        dimensions = dimensions_right
-    else:
-        dimensions = dimensions_left
+def checkExclamation(sct, img=exclamation, filter=filter1, Type=1, dimensions=dimensions):
     scr = numpy.array(sct.grab(dimensions))
     scr = apply_hsv_filter(scr, filter, Type)
     result = cv2.matchTemplate(
@@ -115,12 +115,13 @@ def Fishing(sct, img=fishing, dimensions=fishing_dimensions):
     scr_remove = cv2.cvtColor(scr, cv2.COLOR_BGR2GRAY)
     result = cv2.matchTemplate(scr_remove, img, cv2.TM_CCOEFF_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
-    return max_val
+    return max_val, result
 
 
 def pullCheck(sct, img=pull, dimensions=fishing_dimensions):
     scr = numpy.array(sct.grab(dimensions))
-    scr_remove = scr[:, :, :3]
+    scr_remove = cv2.cvtColor(scr, cv2.COLOR_BGR2GRAY)
+    # scr_remove = scr[:, :, :3]
     result = cv2.matchTemplate(scr_remove, img, cv2.TM_CCOEFF_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
     return max_val, result
@@ -141,7 +142,7 @@ def caughtCheck(fishes, caught, sct, img=fishCaught, dimensions=fishing_dimensio
     scr_remove = scr[:, :, :3]
     result = cv2.matchTemplate(scr_remove, img, cv2.TM_CCOEFF_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(result)
-    if max_val >= .82:
+    if max_val >= .42:
         fishes += 1
         caught = True
         releaseRod()
@@ -193,8 +194,10 @@ def showRectangles(sct, result, threshold, target, dimensions, text, fullScreen=
     rectangles = []
     try:
         yloc, xloc = numpy.where(result[1] >= threshold)
+        text += f' {round(result[0], 2)}'
     except:
         yloc, xloc = numpy.where(result[2] >= threshold)
+        text += f' {round(result[0], 2)}'
     for (x, y) in zip(xloc, yloc):
         rectangles.append([int(x + dimensions['left']),
                           int(y + dimensions['top']), int(w), int(h)])
@@ -226,35 +229,35 @@ def showDetectionArea(sct, dimensions, text, fullScreen=full_dimensions):
     return scr
 
 
-def showFrames(sct, start, duration, Type, dimensions_right=dimensions, dimensions_left=dimensions_left):
+def showFrames(sct, start, duration, Type, dimensions=dimensions):
 
     while True:
-        if checkRod(sct)[2]:
-            dimensions = dimensions_right
-        else:
-            dimensions = dimensions_left
         if Type == 1:
-            img = showRectangles(sct, checkCork(sct), 0.55,
-                                 processed_cork, dimensions, 'cork  **1**')
+            img = showRectangles(sct, checkExclamation(
+                sct), 0.55, exclamation, dimensions, 'exclamation')
             name = 'fishing with filter1'
         else:
-            img = showRectangles(sct, checkCork(
-                sct, processed_cork2, filter2, 2), 0.55, processed_cork2, dimensions, 'cork  **2**')
+            img = showRectangles(sct, checkExclamation(
+                sct, exclamation, filter2, 2), 0.55, exclamation, dimensions, 'exclamation')
             name = 'fishing with filter2'
-        img = showRectangles(img, checkRod(sct), 0.70,
+        img = showRectangles(img, checkRod(sct), 0.60,
                              rod, player_dimensions, 'Rod')
-        img = showRectangles(img, pullCheck(sct), 0.80,
-                             pull, fishing_dimensions, 'Fishing')
+        img = showRectangles(img, Fishing(sct), 0.60,
+                             fishing, fishing_dimensions, 'Fishing')
+        img = showRectangles(img, pullCheck(sct), 0.55,
+                             pull, fishing_dimensions, 'Pulling')
         img = showRectangles(img, caughtCheck(0, None, sct),
-                             0.82, fishCaught, fishing_dimensions, 'Caught!')
+                             0.42, fishCaught, fishing_dimensions, 'Caught!')
         img = showDetectionArea(showDetectionArea(showDetectionArea(
-            img, fishing_dimensions, 'Fishing area'), player_dimensions, 'Player area'), dimensions, 'Cork area')
+            img, fishing_dimensions, 'Fishing area'), dimensions, 'Cork area'), player_dimensions, 'Player area')
         cv2.namedWindow(name, cv2.WINDOW_NORMAL)
-        cv2.resizeWindow(name, 440, 500)
+        cv2.resizeWindow(name, 600, 750)
         hWnd = win32gui.FindWindow(None, name)
         win32gui.SetWindowPos(hWnd, win32con.HWND_TOPMOST, 0, 0, 0, 0,
                               win32con.SWP_SHOWWINDOW | win32con.SWP_NOSIZE | win32con.SWP_NOMOVE)
-        cv2.imshow(name, img[400:900, 740:1180])
+        cv2.imshow(name, img[int(screenHeight / 2 - 250):int(screenHeight /
+                                                             2 + 500), int(screenWidth / 2 - 300):int(screenWidth / 2 + 300)])
+
         cv2.waitKey(1)
         if keyboard.is_pressed('q') or divmod((datetime.now() - start).total_seconds(), 60)[0] >= duration:
             break
@@ -264,13 +267,13 @@ def quit(sct, start, duration, trys, items, fishes, fails, minute, Type):
     if keyboard.is_pressed('q') or divmod((datetime.now() - start).total_seconds(), 60)[0] >= duration:
         end = datetime.now()
         clear()
-        if checkRod(sct)[0] >= .60:
+        if checkRod(sct)[0] >= .65:
             throwRod()
         total_duration = int(divmod((end - start).total_seconds(), 60)[0])
         clear()
         text = f'Session started at: {start.strftime("%H:%M:%S")}\nTrys: {trys}\nItems: {items}\nFishes: {fishes}\nFails: {fails}\nSession ended at: {end.strftime("%H:%M:%S")}\nSession duration: {total_duration} {minute}\nFilter type: {Type}'
         try:
-            text += f'\nCatches per minute ratio: {(items + fishes) / total_duration}'
+            text += f'\nCatches per minute ratio: {round((items + fishes) / total_duration, 2)}'
         except:
             text += '\nToo little time to be able to calculate the catches/minute ratio'
         with open('results.txt', 'w', encoding='utf-8') as f:
