@@ -1,9 +1,0 @@
-Session started at: 02:04:35
-Trys: 1820
-Items: 532
-Fishes: 1287
-Fails: 0
-Session ended at: 08:20:20
-Session duration: 375 minutes
-Filter type: 1
-Catches per minute ratio: 4.85
