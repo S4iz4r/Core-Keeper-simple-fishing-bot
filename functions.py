@@ -40,7 +40,6 @@ filter2 = HsvFilter(115, 0, 0, 179, 255, 203, 226, 0, 115, 36)
 rod = cv2.imread('img/rod.jpg', cv2.IMREAD_GRAYSCALE)
 rodLeft = cv2.imread('img/rodLeft.jpg', cv2.IMREAD_GRAYSCALE)
 fishing = cv2.imread('img/fishing.jpg', cv2.IMREAD_GRAYSCALE)
-# pull = cv2.imread('img/pullFish.jpg', cv2.IMREAD_UNCHANGED)
 pull = cv2.imread('img/pullFish.jpg', cv2.IMREAD_GRAYSCALE)
 fishCaught = cv2.imread('img/fishCaught.jpg', cv2.IMREAD_UNCHANGED)
 
@@ -51,21 +50,23 @@ fishing_dimensions = {
     'height': 105
 }
 
+fishing_area = {
+    'left': int(screenWidth / 2 - 300),
+    'top': int(screenHeight / 2 - 250),
+    'width': 600,
+    'height': 750
+}
+
 player_dimensions = {
-    'left': int(screenWidth / 2 - 120),  # 860
-    'top': int(screenHeight / 2 - 140),  # 450
+    'left': int(screenWidth / 2 - 120),
+    'top': int(screenHeight / 2 - 140),
     'width': 225,
     'height': 180
 }
-dimensions_left = {
-    'left': int(screenWidth / 2 - 55),  # 882
-    'top': int(screenHeight / 2 - 230),  # 565
-    'width': 100,
-    'height': 100
-}
+
 dimensions = {
-    'left': int(screenWidth / 2 - 55),  # 1005
-    'top': int(screenHeight / 2 - 230),  # 565,
+    'left': int(screenWidth / 2 - 55),
+    'top': int(screenHeight / 2 - 230),
     'width': 100,
     'height': 100
 }
@@ -76,13 +77,17 @@ full_dimensions = {
     'height': screenHeight
 }
 
+# fishing_dimensions = fishing_area
+# player_dimensions = fishing_area
+# dimensions = fishing_area
+
 
 def checkExclamation(sct, img=exclamation, filter=filter1, Type=1, dimensions=dimensions):
     scr = numpy.array(sct.grab(dimensions))
     scr = apply_hsv_filter(scr, filter, Type)
     result = cv2.matchTemplate(
         scr, img, cv2.TM_CCOEFF_NORMED)
-    _, max_val, _, max_loc = cv2.minMaxLoc(result)
+    _, max_val, _, _ = cv2.minMaxLoc(result)
     return max_val, result
 
 
@@ -93,8 +98,8 @@ def checkRod(sct, img=rod, imgl=rodLeft, dimensions=player_dimensions):
         scr_remove, img, cv2.TM_CCOEFF_NORMED)
     resultL = cv2.matchTemplate(
         scr_remove, imgl, cv2.TM_CCOEFF_NORMED)
-    _, max_val, _, max_loc = cv2.minMaxLoc(result)
-    _, max_valL, _, max_locL = cv2.minMaxLoc(resultL)
+    _, max_val, _, _ = cv2.minMaxLoc(result)
+    _, max_valL, _, _ = cv2.minMaxLoc(resultL)
     if max_valL > max_val + (max_val * 20 / 100):
         rodRight = False
         return max_valL, resultL, rodRight
@@ -114,16 +119,15 @@ def Fishing(sct, img=fishing, dimensions=fishing_dimensions):
     scr = numpy.array(sct.grab(dimensions))
     scr_remove = cv2.cvtColor(scr, cv2.COLOR_BGR2GRAY)
     result = cv2.matchTemplate(scr_remove, img, cv2.TM_CCOEFF_NORMED)
-    _, max_val, _, max_loc = cv2.minMaxLoc(result)
+    _, max_val, _, _ = cv2.minMaxLoc(result)
     return max_val, result
 
 
 def pullCheck(sct, img=pull, dimensions=fishing_dimensions):
     scr = numpy.array(sct.grab(dimensions))
     scr_remove = cv2.cvtColor(scr, cv2.COLOR_BGR2GRAY)
-    # scr_remove = scr[:, :, :3]
     result = cv2.matchTemplate(scr_remove, img, cv2.TM_CCOEFF_NORMED)
-    _, max_val, _, max_loc = cv2.minMaxLoc(result)
+    _, max_val, _, _ = cv2.minMaxLoc(result)
     return max_val, result
 
 
@@ -141,7 +145,7 @@ def caughtCheck(fishes, caught, sct, img=fishCaught, dimensions=fishing_dimensio
     scr = numpy.array(sct.grab(dimensions))
     scr_remove = scr[:, :, :3]
     result = cv2.matchTemplate(scr_remove, img, cv2.TM_CCOEFF_NORMED)
-    _, max_val, _, max_loc = cv2.minMaxLoc(result)
+    _, max_val, _, _ = cv2.minMaxLoc(result)
     if max_val >= .42:
         fishes += 1
         caught = True
@@ -152,10 +156,6 @@ def caughtCheck(fishes, caught, sct, img=fishCaught, dimensions=fishing_dimensio
 
 
 def apply_hsv_filter(sct, hsv_filter, Type):
-    if Type == 1:
-        name = 'filter1'
-    else:
-        name = 'filter2'
     hsv = cv2.cvtColor(sct, cv2.COLOR_BGR2HSV)
     h, s, v = cv2.split(hsv)
     s = shift_channel(s, hsv_filter.sAdd)
@@ -203,7 +203,7 @@ def showRectangles(sct, result, threshold, target, dimensions, text, fullScreen=
                           int(y + dimensions['top']), int(w), int(h)])
         rectangles.append([int(x + dimensions['left']),
                           int(y + dimensions['top']), int(w), int(h)])
-    rectangles, weights = cv2.groupRectangles(rectangles, 1, 0.3)
+    rectangles, _ = cv2.groupRectangles(rectangles, 1, 0.3)
     for (x, y, w, h) in rectangles:
         cv2.rectangle(scr, (x, y), (x + w, y + h), (0, 255, 0), 2)
         org = (int(x), int(y + h + 15))
@@ -240,7 +240,7 @@ def showFrames(sct, start, duration, Type, dimensions=dimensions):
             img = showRectangles(sct, checkExclamation(
                 sct, exclamation, filter2, 2), 0.55, exclamation, dimensions, 'exclamation')
             name = 'fishing with filter2'
-        img = showRectangles(img, checkRod(sct), 0.60,
+        img = showRectangles(img, checkRod(sct), 0.70,
                              rod, player_dimensions, 'Rod')
         img = showRectangles(img, Fishing(sct), 0.60,
                              fishing, fishing_dimensions, 'Fishing')
