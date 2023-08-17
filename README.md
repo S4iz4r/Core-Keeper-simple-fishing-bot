@@ -22,7 +22,8 @@ I want to make the latter clear. I don't want to be called a "boter" or "cheater
       It doesn't matter if the water block is to the right 
       or left of the character, but never above or below.
       Remember that it only works with 3440x1440 resolution,
-      it does not scale automatically (WIP)
+      it does not scale automatically (WIP).
+      I have tried to modify the position of the detectors taking as reference the center of the monitor, but the scale of the images also changes and that makes it difficult to match. In the next attempt I will try to calculate the scale difference of the different resolutions, and I will apply the calculations based on them instead of the distance in pixels as I have now.
       
 - 3- Place your fishing rod in the button 5 of your action bar.
       I have chosen button 5 because... why not?.
