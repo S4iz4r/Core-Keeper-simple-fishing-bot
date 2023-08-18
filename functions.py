@@ -58,10 +58,10 @@ fishing_area = {
 }
 
 player_dimensions = {
-    'left': int(screenWidth / 2 - 120),
-    'top': int(screenHeight / 2 - 140),
-    'width': 225,
-    'height': 180
+    'left': int(screenWidth / 2 - 105),
+    'top': int(screenHeight / 2 - 110),
+    'width': 210,
+    'height': 110
 }
 
 dimensions = {
