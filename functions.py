@@ -1,4 +1,5 @@
 import cv2
+from screeninfo import get_monitors
 import mss
 import numpy
 import pyautogui
@@ -28,11 +29,9 @@ class HsvFilter:
 
 
 sct = mss.mss()
-cv2.namedWindow("dst", cv2.WND_PROP_FULLSCREEN)
-cv2.setWindowProperty("dst", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
-_, _, screenWidth, screenHeight = cv2.getWindowImageRect('dst')
-cv2.destroyAllWindows()
-print(f'Meassured screen size: {screenWidth}x{screenHeight}')
+for monitor in get_monitors():
+    if monitor.is_primary:
+        screenWidth, screenHeight = monitor.width, monitor.height
 
 exclamation = cv2.imread('img/exclamation.jpg', cv2.IMREAD_UNCHANGED)
 filter1 = HsvFilter(111, 0, 59, 179, 254, 255, 103, 0, 255, 54)
